@@ -15,6 +15,16 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
+        ViewData["Email"] = "andre.junior@gmail.com";
+
+        return View();
+    }
+
+    public IActionResult About()
+    {
+        ViewData["Message"] = "Salles web MVC from C# course";
+        ViewData["Professor"] = "Nélio Alves";
+
         return View();
     }
 
