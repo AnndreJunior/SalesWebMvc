@@ -3,7 +3,9 @@ using SalesWebMvc.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<SalesWebMvcContext>(opts => opts.UseSqlServer("Connection"));
+var connectionString = builder.Configuration["ConnectionStrings:DefaultConnection"];
+
+builder.Services.AddDbContext<SalesWebMvcContext>(opts => opts.UseNpgsql(connectionString));
 
 builder.Services.AddControllersWithViews();
 
