@@ -5,17 +5,15 @@ public class Seller
     public Seller() { }
 
     public Seller(
-        int id,
         string name,
         string email,
         DateTime birthDate,
         double baseSalary,
         Department department)
     {
-        Id = id;
         Name = name;
         Email = email;
-        BirthDate = birthDate;
+        BirthDate = birthDate.ToUniversalTime();
         BaseSalary = baseSalary;
         Department = department;
     }
@@ -25,10 +23,10 @@ public class Seller
     public string Email { get; set; } = string.Empty;
     public DateTime BirthDate { get; set; }
     public double BaseSalary { get; set; }
+    public Department? Department { get; set; }
 
     # region Methods
 
-    public Department Department { get; set; } = null!;
     public ICollection<SalesRecord> Sales { get; set; } = [];
 
     public void AddSales(SalesRecord salesRecord) => Sales.Add(salesRecord);

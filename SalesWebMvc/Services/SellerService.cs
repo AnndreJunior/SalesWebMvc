@@ -13,4 +13,11 @@ public class SellerService
     }
 
     public List<Seller> FindAll() => [.. _context.Sellers]; // _context.Sellers.ToList()
+
+    public void Insert(Seller seller)
+    {
+        seller.BirthDate = seller.BirthDate.ToUniversalTime();
+        _context.Sellers.Add(seller);
+        _context.SaveChanges();
+    }
 }
