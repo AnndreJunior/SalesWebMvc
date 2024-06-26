@@ -5,12 +5,14 @@ public class Seller
     public Seller() { }
 
     public Seller(
+        int id,
         string name,
         string email,
         DateTime birthDate,
         double baseSalary,
         Department department)
     {
+        Id = id;
         Name = name;
         Email = email;
         BirthDate = birthDate.ToUniversalTime();
@@ -23,7 +25,8 @@ public class Seller
     public string Email { get; set; } = string.Empty;
     public DateTime BirthDate { get; set; }
     public double BaseSalary { get; set; }
-    public Department? Department { get; set; }
+    public Department Department { get; set; } = null!;
+    public int DepartmentId { get; set; }
 
     # region Methods
 

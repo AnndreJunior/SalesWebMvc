@@ -4,8 +4,9 @@ public class Department
 {
     public Department() { }
 
-    public Department(string name)
+    public Department(int id, string name)
     {
+        Id = id;
         Name = name;
     }
 

@@ -6,8 +6,9 @@ public class SalesRecord
 {
     public SalesRecord() { }
 
-    public SalesRecord(DateTime date, double ammount, ESaleStatus status, Seller seller)
+    public SalesRecord(int id, DateTime date, double ammount, ESaleStatus status, Seller seller)
     {
+        Id = id;
         Date = date;
         Ammount = ammount;
         Status = status;
