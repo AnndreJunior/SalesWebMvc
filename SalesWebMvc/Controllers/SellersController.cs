@@ -5,7 +5,6 @@ using SalesWebMvc.Services;
 
 namespace SalesWebMvc.Controllers;
 
-[Route("[controller]")]
 public class SellersController : Controller
 {
     private readonly SellerService _sellerService;
@@ -25,7 +24,6 @@ public class SellersController : Controller
 
     #region Create
 
-    [HttpGet("Create")]
     public IActionResult Create()
     {
         var departments = _departmentService.FindAll();
@@ -36,11 +34,36 @@ public class SellersController : Controller
         return View(viewModel);
     }
 
-    [HttpPost("Create")]
+    [HttpPost]
     [ValidateAntiForgeryToken]
     public IActionResult Create(Seller seller)
     {
         _sellerService.Insert(seller);
+        return RedirectToAction(nameof(Index));
+    }
+
+    #endregion
+
+    #region Delete
+
+    public IActionResult Delete(int? id)
+    {
+        if (id is null)
+            return NotFound();
+
+        var seller = _sellerService.FindById(id.Value);
+
+        if (seller is null)
+            return NotFound();
+
+        return View(seller);
+    }
+
+    [HttpPost, ActionName("Delete")]
+    [ValidateAntiForgeryToken]
+    public IActionResult Delete(int id)
+    {
+        _sellerService.Remove(id);
         return RedirectToAction(nameof(Index));
     }
 

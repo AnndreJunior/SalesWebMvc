@@ -20,4 +20,16 @@ public class SellerService
         _context.Sellers.Add(seller);
         _context.SaveChanges();
     }
+
+    public Seller? FindById(int id)
+    {
+        return _context.Sellers.FirstOrDefault(x => x.Id == id);
+    }
+
+    public void Remove(int id)
+    {
+        var obj = _context.Sellers.First(x => x.Id == id);
+        _context.Sellers.Remove(obj);
+        _context.SaveChanges();
+    }
 }
