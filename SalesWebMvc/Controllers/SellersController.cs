@@ -68,4 +68,21 @@ public class SellersController : Controller
     }
 
     #endregion
+
+    #region Details
+
+    public IActionResult Details(int? id)
+    {
+        if (id is null)
+            return NotFound();
+
+        var seller = _sellerService.FindById(id.Value);
+
+        if (seller is null)
+            return NotFound();
+
+        return View(seller);
+    }
+
+    #endregion
 }
