@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using SalesWebMvc.Models;
 using SalesWebMvc.Models.ViewModels;
@@ -50,12 +51,12 @@ public class SellersController : Controller
     public IActionResult Delete(int? id)
     {
         if (id is null)
-            return NotFound();
+            return RedirectToAction(nameof(Error), new { message = "Id não informado" });
 
         var seller = _sellerService.FindById(id.Value);
 
         if (seller is null)
-            return NotFound();
+            return RedirectToAction(nameof(Error), new { message = "Vendendor não encontrado" });
 
         return View(seller);
     }
@@ -75,12 +76,12 @@ public class SellersController : Controller
     public IActionResult Details(int? id)
     {
         if (id is null)
-            return NotFound();
+            return RedirectToAction(nameof(Error), new { message = "Id não informado" });
 
         var seller = _sellerService.FindById(id.Value);
 
         if (seller is null)
-            return NotFound();
+            return RedirectToAction(nameof(Error), new { message = "Vendendor não encontrado" });
 
         return View(seller);
     }
@@ -93,13 +94,13 @@ public class SellersController : Controller
     {
         if (id is null)
         {
-            return NotFound();
+            return RedirectToAction(nameof(Error), new { message = "Id não informado" });
         }
 
         var obj = _sellerService.FindById(id.Value);
         if (obj is null)
         {
-            return NotFound();
+            return RedirectToAction(nameof(Error), new { message = "Vendendor não encontrado" });
         }
 
         List<Department> departments = _departmentService.FindAll();
@@ -118,7 +119,7 @@ public class SellersController : Controller
     {
         if (id != seller.Id)
         {
-            return BadRequest();
+            return RedirectToAction(nameof(Error), new { message = "Ids não batem" });
         }
 
         try
@@ -126,15 +127,22 @@ public class SellersController : Controller
             _sellerService.Update(seller);
             return RedirectToAction(nameof(Index));
         }
-        catch (NotFoundException)
+        catch (ApplicationException ex)
         {
-            return NotFound();
-        }
-        catch (DbConcurrencyException)
-        {
-            return BadRequest();
+            return RedirectToAction(nameof(Error), new { message = ex.Message });
         }
     }
 
     #endregion
+
+    public IActionResult Error(string message)
+    {
+        var viewModel = new ErrorViewModel
+        {
+            Message = message,
+            RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
+        };
+
+        return View(viewModel);
+    }
 }
