@@ -21,6 +21,7 @@ public class SellersController : Controller
     public IActionResult Index()
     {
         var sellerList = _sellerService.FindAll();
+        sellerList.ForEach(seller => seller.BirthDate = seller.BirthDate.ToLocalTime());
         return View(sellerList);
     }
 
@@ -83,6 +84,7 @@ public class SellersController : Controller
         if (seller is null)
             return RedirectToAction(nameof(Error), new { message = "Vendendor não encontrado" });
 
+        seller.BirthDate = seller.BirthDate.ToLocalTime();
         return View(seller);
     }
 

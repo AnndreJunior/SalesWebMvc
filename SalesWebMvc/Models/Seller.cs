@@ -1,3 +1,6 @@
+using System.ComponentModel.DataAnnotations;
+using Npgsql.Internal;
+
 namespace SalesWebMvc.Models;
 
 public class Seller
@@ -21,10 +24,23 @@ public class Seller
     }
 
     public int Id { get; set; }
+
+    [Display(Name = "Nome")]
     public string Name { get; set; } = string.Empty;
+
+    [DataType(DataType.EmailAddress)]
     public string Email { get; set; } = string.Empty;
+
+    [Display(Name = "Data de nascimento")]
+    [DataType(DataType.Date)]
+    [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
     public DateTime BirthDate { get; set; }
+
+    [Display(Name = "Salário base")]
+    [DisplayFormat(DataFormatString = "{0:F2}")]
     public double BaseSalary { get; set; }
+
+    [Display(Name = "Departamento")]
     public Department Department { get; set; } = null!;
     public int DepartmentId { get; set; }
 
