@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace SalesWebMvc.Models;
 
 public class Department
@@ -11,6 +13,8 @@ public class Department
     }
 
     public int Id { get; set; }
+
+    [Required(ErrorMessage = "Campo {0} é obrigatório")]
     public string Name { get; set; } = string.Empty;
 
     public ICollection<Seller> Sellers { get; set; } = [];
