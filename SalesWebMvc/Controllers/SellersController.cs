@@ -18,18 +18,18 @@ public class SellersController : Controller
         _departmentService = departmentService;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        var sellerList = _sellerService.FindAll();
+        var sellerList = await _sellerService.FindAll();
         sellerList.ForEach(seller => seller.BirthDate = seller.BirthDate.ToLocalTime());
         return View(sellerList);
     }
 
     #region Create
 
-    public IActionResult Create()
+    public async Task<IActionResult> Create()
     {
-        var departments = _departmentService.FindAll();
+        var departments = await _departmentService.FindAll();
         var viewModel = new SellerFormViewModel
         {
             Departments = departments,
@@ -39,16 +39,16 @@ public class SellersController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult Create(Seller seller)
+    public async Task<IActionResult> Create(Seller seller)
     {
-        if (!ModelState.IsValid)
-        {
-            var departments = _departmentService.FindAll();
-            var viewModel = new SellerFormViewModel { Seller = seller, Departments = departments };
-            return View(viewModel);
-        }
+        // if (!ModelState.IsValid)
+        // {
+        //     var departments = await _departmentService.FindAll();
+        //     var viewModel = new SellerFormViewModel { Seller = seller, Departments = departments };
+        //     return View(viewModel);
+        // }
 
-        _sellerService.Insert(seller);
+        await _sellerService.Insert(seller);
         return RedirectToAction(nameof(Index));
     }
 
@@ -56,12 +56,12 @@ public class SellersController : Controller
 
     #region Delete
 
-    public IActionResult Delete(int? id)
+    public async Task<IActionResult> Delete(int? id)
     {
         if (id is null)
             return RedirectToAction(nameof(Error), new { message = "Id não informado" });
 
-        var seller = _sellerService.FindById(id.Value);
+        var seller = await _sellerService.FindById(id.Value);
 
         if (seller is null)
             return RedirectToAction(nameof(Error), new { message = "Vendendor não encontrado" });
@@ -71,9 +71,9 @@ public class SellersController : Controller
 
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
-    public IActionResult Delete(int id)
+    public async Task<IActionResult> Delete(int id)
     {
-        _sellerService.Remove(id);
+        await _sellerService.Remove(id);
         return RedirectToAction(nameof(Index));
     }
 
@@ -81,12 +81,12 @@ public class SellersController : Controller
 
     #region Details
 
-    public IActionResult Details(int? id)
+    public async Task<IActionResult> Details(int? id)
     {
         if (id is null)
             return RedirectToAction(nameof(Error), new { message = "Id não informado" });
 
-        var seller = _sellerService.FindById(id.Value);
+        var seller = await _sellerService.FindById(id.Value);
 
         if (seller is null)
             return RedirectToAction(nameof(Error), new { message = "Vendendor não encontrado" });
@@ -99,20 +99,20 @@ public class SellersController : Controller
 
     #region Edit
 
-    public IActionResult Edit(int? id)
+    public async Task<IActionResult> Edit(int? id)
     {
         if (id is null)
         {
             return RedirectToAction(nameof(Error), new { message = "Id não informado" });
         }
 
-        var obj = _sellerService.FindById(id.Value);
+        var obj = await _sellerService.FindById(id.Value);
         if (obj is null)
         {
             return RedirectToAction(nameof(Error), new { message = "Vendendor não encontrado" });
         }
 
-        List<Department> departments = _departmentService.FindAll();
+        List<Department> departments = await _departmentService.FindAll();
         SellerFormViewModel viewModel = new()
         {
             Seller = obj,
@@ -124,11 +124,11 @@ public class SellersController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult Edit(int id, Seller seller)
+    public async Task<IActionResult> Edit(int id, Seller seller)
     {
         if (!ModelState.IsValid)
         {
-            var departments = _departmentService.FindAll();
+            var departments = await _departmentService.FindAll();
             var viewModel = new SellerFormViewModel { Seller = seller, Departments = departments };
             return View(viewModel);
         }
@@ -140,7 +140,7 @@ public class SellersController : Controller
 
         try
         {
-            _sellerService.Update(seller);
+            await _sellerService.Update(seller);
             return RedirectToAction(nameof(Index));
         }
         catch (ApplicationException ex)
