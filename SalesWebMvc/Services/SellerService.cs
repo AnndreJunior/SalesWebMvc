@@ -30,9 +30,16 @@ public class SellerService
 
     public async Task Remove(int id)
     {
-        var obj = await _context.Sellers.FirstAsync(x => x.Id == id);
-        _context.Sellers.Remove(obj);
-        await _context.SaveChangesAsync();
+        try
+        {
+            var obj = await _context.Sellers.FirstAsync(x => x.Id == id);
+            _context.Sellers.Remove(obj);
+            await _context.SaveChangesAsync();
+        }
+        catch (DbUpdateException)
+        {
+            throw new IntegrityException("Não foi possível deletar um vendedor pois ele(a) já possui vendas");
+        }
     }
 
     public async Task Update(Seller seller)
