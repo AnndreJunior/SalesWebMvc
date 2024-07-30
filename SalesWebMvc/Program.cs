@@ -20,6 +20,7 @@ builder.Services.AddDbContext<SalesWebMvcContext>(opts => opts.UseNpgsql(connect
 // builder.Services.AddScoped<SeedingService>();
 builder.Services.AddScoped<SellerService>();
 builder.Services.AddScoped<DepartmentService>();
+builder.Services.AddScoped<SalesRecordService>();
 
 builder.Services.AddControllersWithViews();
 
