@@ -33,8 +33,19 @@ public class SalesRecordsController : Controller
         return View(result);
     }
 
-    public IActionResult GroupingSearch()
+    public async Task<IActionResult> GroupingSearch(DateTime? minDate, DateTime? maxDate)
     {
-        return View();
+        if (!minDate.HasValue)
+        {
+            minDate = new DateTime(DateTime.UtcNow.Year, 1, 1);
+        }
+        if (!maxDate.HasValue)
+        {
+            maxDate = DateTime.UtcNow;
+        }
+        ViewData["minDate"] = minDate.Value.ToString("yyyy-MM-dd");
+        ViewData["maxDate"] = maxDate.Value.ToString("yyyy-MM-dd");
+        var result = await _salesRecordService.FindByDateGroupingAsync(minDate?.ToUniversalTime(), maxDate?.ToUniversalTime());
+        return View(result);
     }
 }
