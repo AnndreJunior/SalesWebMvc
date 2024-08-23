@@ -2,6 +2,7 @@ using System.Globalization;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using SalesWebMvc.Data;
+using SalesWebMvc.Extensions;
 using SalesWebMvc.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,7 +18,7 @@ var localizationOptions = new RequestLocalizationOptions
 
 builder.Services.AddDbContext<SalesWebMvcContext>(opts => opts.UseNpgsql(connectionString));
 
-// builder.Services.AddScoped<SeedingService>();
+builder.Services.AddScoped<SeedingService>();
 builder.Services.AddScoped<SellerService>();
 builder.Services.AddScoped<DepartmentService>();
 builder.Services.AddScoped<SalesRecordService>();
@@ -31,13 +32,10 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
-// else
-// {
-//     using var scope = app.Services.CreateScope();
-//     var services = scope.ServiceProvider;
-//     var seedingService = services.GetRequiredService<SeedingService>();
-//     seedingService.Seed();
-// }
+else
+{
+    await app.UseSeedingService();
+}
 
 app.UseRequestLocalization(localizationOptions);
 
